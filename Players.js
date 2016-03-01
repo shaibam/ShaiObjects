@@ -31,8 +31,6 @@ var SpecialPlayer = function() {
 var _player = new Player();
 var _special_player = new SpecialPlayer();
 
-console.log(_player);
-console.log(_special_player);
 
 function Parent() {
     var T = new Object_Document();
@@ -42,17 +40,13 @@ function Parent() {
 
 function ChildA() {
     this.addChild(this.New(ChildB));
-    this.children[0].Listen("SOME_EVENT",function() {
-        //this.stopBubble();
-        console.log("SOME_EVENT from childA")
-    })
 }
 
 function ChildB() {    
-    var T = this;
-     T.Test = function() {
-         T.Dispatch("SOME_EVENT","string_argument");
-     }
+    this.Test = function() {
+        this.Dispatch("SOME_EVENT","string_argument");
+    }
+
 }
 
 var _parent = new Parent();
