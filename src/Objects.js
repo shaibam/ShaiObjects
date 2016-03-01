@@ -43,9 +43,7 @@
         for (var i in arguments ) {                
             s =  arguments[i];
             var s= new Date().toLocaleString()+" : " +s;
-            this.log = (this.log ? this.log+"<br/>"+(s.toString()) : s);
-            if (window.alerT)
-                window.alerT(s);
+            this.log = (this.log ? this.log+"<br/>"+(s.toString()) : s);          
         }
     }
 
