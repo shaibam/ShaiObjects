@@ -43,7 +43,7 @@
         for (var i in arguments ) {                
             s =  arguments[i];
             var s= new Date().toLocaleString()+" : " +s;
-            this.log = (this.log ? this.log+"<br/>"+(s.toString()) : s);          
+            this.log = (this.log ? this.log+"<br/>"+(s.toString()) : s);            
         }
     }
 
@@ -55,9 +55,11 @@
         _obj.prototype.Document = (this.constructor == Object_Document ? this : this.Document);
         _obj.prototype.New = this.New;
         _obj.prototype.id = parseInt(Math.random()*10000);  
+        _obj.prototype.children = [];
         extend(_obj.prototype,Eventor.prototype);
-        T.Obj = new (Function.prototype.bind.apply(_obj, arguments));
-        return T.Obj;
+        /*T.Obj = new (Function.prototype.bind.apply(_obj, arguments));
+        return T.Obj;*/       
+        return new (Function.prototype.bind.apply(_obj, arguments));
     }
     
     //Methods
@@ -90,9 +92,11 @@
         this.callback_list.push(callback)        
     }
 
-     function addChild(_obj) {   
+     function addChild(_obj) { 
+        this.children=[];
+        _obj.parent = this;  
         this.children.push(_obj);
-        _obj.parent = this;
+     
     }
 
 })(window);
