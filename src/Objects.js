@@ -44,6 +44,7 @@
     //Main Document Class
     function Object_Document() {
         ShaiObject.call(this);
+        this.constructor = Object_Document;
     }
     Object_Document.prototype = Object.create(ShaiObject.prototype);
     
