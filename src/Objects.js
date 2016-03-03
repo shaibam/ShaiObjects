@@ -16,27 +16,36 @@
       return destination; 
     }
     
-    //Events Class
-    function Eventor() {}
-    Eventor.prototype.Dispatch = Dispatch;
-    Eventor.prototype.Detach = Detach;
-    Eventor.prototype.Listen = Listen;
-    Eventor.prototype.addChild = addChild;
-    Eventor.prototype.children = [];
-    Eventor.prototype.dispatched_list = [];
-    Eventor.prototype.listener_list = [];
-    Eventor.prototype.callback_list = [];
-    Eventor.prototype.stop = false;
-    Eventor.prototype.stopBubble = function() {
+    function ShaiObject() {
+        var id = parseInt(Math.random()*10000);
+        Object.defineProperty(this,'id',{
+            get: function () {
+                return id;
+            }
+        });
+
+        this.children = [];
+        this.dispatched_list = [];
+        this.listener_list = [];
+        this.callback_list = [];
+        this.stop = false;     
+    }
+
+    ShaiObject.prototype.New = New;
+    ShaiObject.prototype.Dispatch = Dispatch;
+    ShaiObject.prototype.Detach = Detach;
+    ShaiObject.prototype.Listen = Listen;
+    ShaiObject.prototype.listener_list = Listen;
+    ShaiObject.prototype.addChild = addChild;
+    ShaiObject.prototype.stopBubble = function() {
         this.stop = true;
     }
     
     //Main Document Class
     function Object_Document() {
-        var T = this;
-        T.id = parseInt(Math.random()*10000);
+        ShaiObject.call(this);
     }
-    extend(Object_Document.prototype,Eventor.prototype);
+    Object_Document.prototype = Object.create(ShaiObject.prototype);
     
     Object_Document.prototype.Logger = function() {
         var s;
@@ -47,19 +56,23 @@
         }
     }
 
-    Object_Document.prototype.New = New;
+    //Object_Document.prototype = Object.create(ShaiObject.prototype);
 
     //Objec creation Class
     function New(_obj){
-        var T = this;
+        //var T = this;
+        _obj.prototype = Object.create(ShaiObject.prototype);
         _obj.prototype.Document = (this.constructor == Object_Document ? this : this.Document);
-        _obj.prototype.New = this.New;
+        /*_obj.prototype.New = this.New;
         _obj.prototype.id = parseInt(Math.random()*10000);  
         _obj.prototype.children = [];
-        extend(_obj.prototype,Eventor.prototype);
+        extend(_obj.prototype,Eventor.prototype);*/
         /*T.Obj = new (Function.prototype.bind.apply(_obj, arguments));
-        return T.Obj;*/       
-        return new (Function.prototype.bind.apply(_obj, arguments));
+        return T.Obj;*/     
+        var o = new (Function.prototype.bind.apply(_obj, arguments));
+        ShaiObject.call(o);
+     
+        return o;
     }
     
     //Methods
@@ -93,7 +106,7 @@
     }
 
      function addChild(_obj) { 
-        this.children=[];
+        //this.children=[];
         _obj.parent = this;  
         this.children.push(_obj);
      
