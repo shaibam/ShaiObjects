@@ -28,14 +28,12 @@
         this.dispatched_list = [];
         this.listener_list = [];
         this.callback_list = [];
-        this.stop = false;     
+        this.stop = false;  
     }
-
     ShaiObject.prototype.New = New;
     ShaiObject.prototype.Dispatch = Dispatch;
     ShaiObject.prototype.Detach = Detach;
     ShaiObject.prototype.Listen = Listen;
-    ShaiObject.prototype.listener_list = Listen;
     ShaiObject.prototype.addChild = addChild;
     ShaiObject.prototype.stopBubble = function() {
         this.stop = true;
@@ -61,18 +59,11 @@
 
     //Objec creation Class
     function New(_obj){
-        //var T = this;
-        _obj.prototype = Object.create(ShaiObject.prototype);
-        _obj.prototype.Document = (this.constructor == Object_Document ? this : this.Document);
-        /*_obj.prototype.New = this.New;
-        _obj.prototype.id = parseInt(Math.random()*10000);  
-        _obj.prototype.children = [];
-        extend(_obj.prototype,Eventor.prototype);*/
-        /*T.Obj = new (Function.prototype.bind.apply(_obj, arguments));
-        return T.Obj;*/     
+        //_obj.prototype = Object.create(ShaiObject.prototype);
+        _obj.prototype = new ShaiObject()
+        _obj.prototype.Document = (this.constructor == Object_Document ? this : this.Document);       
+        _obj.prototype.constructor = _obj
         var o = new (Function.prototype.bind.apply(_obj, arguments));
-        ShaiObject.call(o);
-     
         return o;
     }
     
@@ -81,7 +72,6 @@
         this.dispatched_list.push(event_name+"."+this.id);
         var idx = this.listener_list.indexOf(event_name+"."+this.id);
         while (idx!=-1) {
-            //this.callback_list[idx]();            
             this.callback_list[idx].apply(this,[args]);
             idx = this.listener_list.indexOf(event_name+"."+this.id,idx+1);
         }
@@ -107,7 +97,7 @@
     }
 
      function addChild(_obj) { 
-        //this.children=[];
+
         _obj.parent = this;  
         this.children.push(_obj);
      
